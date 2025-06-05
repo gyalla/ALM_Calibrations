@@ -25,7 +25,6 @@ num_interp_points = 300
 turbineDirOut = './'
 outFile = turbineDirOut + 'IEA-15-240-RWT_AeroDyn15_blade_'+str(num_interp_points)+'.dat'
 
-
 ################################################################################
 #Interpolation AeroDyn Information
 ################################################################################
@@ -68,6 +67,7 @@ for column in interp_df.columns:
         column_formats[column] = scientific_format
 
 with open(outFile,'w') as f:
+    lines[3] = re.sub(r'^\s*\d+', str(num_interp_points), lines[3])
     for line in lines[0:6]:
         f.write(line)
 
