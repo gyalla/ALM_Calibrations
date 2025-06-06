@@ -16,14 +16,16 @@ from scipy.interpolate import interp1d
 ################################################################################
 #Location of existing AeroDyn .dat file
 turbineDirIn = './'
-inFile = turbineDirIn + 'IEA-15-240-RWT_AeroDyn15_blade.dat'
+#inFile = turbineDirIn + 'IEA-15-240-RWT_AeroDyn15_blade.dat'
+inFile = turbineDirIn + 'NRELOffshrBsline5MW_AeroDyn_blade.dat'
 
 #New number of Aerodyn blade points to use
 num_interp_points = 300 
 
 #Name of new AeroDyn .dat file
 turbineDirOut = './'
-outFile = turbineDirOut + 'IEA-15-240-RWT_AeroDyn15_blade_'+str(num_interp_points)+'.dat'
+#outFile = turbineDirOut + 'IEA-15-240-RWT_AeroDyn15_blade_'+str(num_interp_points)+'.dat'
+outFile = turbineDirOut + 'NRELOffshrBsline5MW_AeroDyn_blade_'+str(num_interp_points)+'.dat'
 
 ################################################################################
 #Interpolation AeroDyn Information
@@ -44,17 +46,17 @@ lines[3] = re.sub(r'^\d+', str(num_interp_points), lines[3])
 interpolator_kind = 'linear' 
 interp_data = np.zeros((num_interp_points,len(df.keys())))
 for key_counter, key in enumerate(df.keys()):
-    if not key == 'BlAFID':
-        print("Interpolating: ",key)
-        interpolator  = interp1d(orig_points,np.asarray(df[key]),kind=interpolator_kind)
-        interp_data[:,key_counter]  = interpolator(interp_points)
+    #if not key == 'BlAFID':
+    print("Interpolating: ",key)
+    interpolator  = interp1d(orig_points,np.asarray(df[key]),kind=interpolator_kind)
+    interp_data[:,key_counter]  = interpolator(interp_points)
 
 interp_df = pd.DataFrame(interp_data,columns=df.keys())
 
-for i,point in enumerate(interp_df['BlSpn']):
-    idx = (np.abs(df['BlSpn']-point)).argmin() #nearest blade section interpolation 
-    interp_df['BlAFID'][i] = idx+1
-
+#for i,point in enumerate(interp_df['BlSpn']):
+#    idx = (np.abs(df['BlSpn']-point)).argmin() #nearest blade section interpolation 
+#    print(idx)
+#    interp_df['BlAFID'][i] = idx+1
 
 scientific_format = '{:0.15e}'
 integer_format = '{:d}'
